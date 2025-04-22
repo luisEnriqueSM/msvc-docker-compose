@@ -42,5 +42,31 @@ services:
     depends_on:
       - mysql8
 
+  msvc-products:
+    container_name: msvc-products
+    image: msvc-products:v1
+    restart: always
+    networks:
+      - springcloud
+    depends_on:
+      - mysql8
+      - eureka-server
+      - zipkin-server
+
+  msvc-items:
+    container_name: msvc-items
+    image: msvc-items:v1
+    ports:
+      - "8002:8002"
+      - "8005:8005"
+      - "8007:8007"
+    restart: always
+    networks:
+      - springcloud
+    depends_on:
+      - eureka-server
+      - zipkin-server
+      - msvc-products
+
 networks:
   springcloud:
