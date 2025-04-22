@@ -68,5 +68,47 @@ services:
       - zipkin-server
       - msvc-products
 
+  msvc-users:
+    container_name: msvc-users
+    image: msvc-users:v1
+    restart: always
+    networks:
+      - springcloud
+    depends_on:
+      - eureka-server
+      - zipkin-server
+      - mysql8
+
+  msvc-oauth:
+    container_name: msvc-oauth
+    image: msvc-oauth:v1
+    ports:
+      - "9100:9100"
+    restart: always
+    networks:
+      - springcloud
+    depends_on:
+      - eureka-server
+      - zipkin-server
+      - msvc-users
+
+  msvc-gateway-server:
+    container_name: msvc-gateway-server
+    image: msvc-gateway-server:v1
+    ports:
+      - "8090:8090"
+    restart: always
+    networks:
+      - springcloud
+    environment:
+      - IP_ADDR=http://192.168.68.103:9100
+    depends_on:
+      - eureka-server
+      - zipkin-server
+      - msvc-products
+      - msvc-items
+      - msvc-users
+      - msvc-oauth        
+
 networks:
   springcloud:
