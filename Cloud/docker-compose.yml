@@ -1,26 +1,29 @@
 services:
   eureka-server:
     container_name: eureka-server
-    image: luisenriquesm/eureka:v1
+    image: luisenriquesm/eureka:v2
     ports:
       - "8761:8761"
     restart: always
     networks:
       - springcloud
-      
+
   msvc-products:
     container_name: msvc-products
-    image: luisenriquesm/products:v1
+    image: luisenriquesm/products:v2
     restart: always
     networks:
       - springcloud
     depends_on:
-      - mysql8
       - eureka-server
+    environment:
+      - MYSQL_URL=db-msvc-products.cghqeilwhfca.us-east-1.rds.amazonaws.com
+      #- MYSQL_USER: MYSQL_ROOT_PASSWORD
+      #- MYSQL_PASSWORD: sasa1234
 
   msvc-items:
     container_name: msvc-items
-    image: luisenriquesm/items:v2
+    image: luisenriquesm/items:v3
     ports:
       - "8005:8005"
     restart: always
